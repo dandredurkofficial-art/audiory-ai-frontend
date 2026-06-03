@@ -66,36 +66,34 @@
 
                 if (!response.ok) throw new Error("Server issue");
 
-                const contentType = response.headers.get('content-type');
+                // Read incoming text segment payloads safely
+                const rawText = await response.text();
                 
-                if (contentType && contentType.includes('application/json')) {
-                    // Handle Flat JSON (Cover Art Blueprint)
-                    const data = await response.json();
-                    renderCoverArtCard(textContainer, data.reply);
+                let jsonData = null;
+                try {
+                    jsonData = JSON.parse(rawText);
+                } catch(e) {
+                    // Raw string stream chunk fallback route
+                }
+
+                if (jsonData && jsonData.isCover) {
+                    // Structural layout formatting route for flat object cards
+                    renderCoverArtCard(textContainer, jsonData.reply);
                 } else {
-                    // Handle Live Text Stream
-                    const reader = response.body.getReader();
-                    const decoder = new TextDecoder();
+                    // Line-by-line line assembly routing for traditional chunk tracking
+                    const lines = rawText.split('\n');
                     let accumulatedText = "";
 
-                    while (true) {
-                        const { value, done } = await reader.read();
-                        if (done) break;
-
-                        const chunk = decoder.decode(value, { stream: true });
-                        const lines = chunk.split('\n');
-
-                        for (const line of lines) {
-                            if (line.startsWith('data: ')) {
-                                try {
-                                    const parsed = JSON.parse(line.slice(6));
-                                    if (parsed.text) {
-                                        accumulatedText += parsed.text;
-                                        textContainer.innerHTML = formatLinks(accumulatedText);
-                                        chatBox.scrollTop = chatBox.scrollHeight;
-                                    }
-                                } catch (e) {}
-                            }
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const parsed = JSON.parse(line.slice(6));
+                                if (parsed.text) {
+                                    accumulatedText += parsed.text;
+                                    textContainer.innerHTML = formatLinks(accumulatedText);
+                                    chatBox.scrollTop = chatBox.scrollHeight;
+                                }
+                            } catch (e) {}
                         }
                     }
                 }
