@@ -14,24 +14,28 @@
 <body class="font-sans min-h-screen flex flex-col items-center justify-center p-4">
 
     <div class="w-full max-w-2xl bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[600px]">
+        <!-- Header -->
         <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 flex items-center justify-between shadow-lg">
             <div class="flex items-center space-x-3">
                 <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                 <h1 class="text-xl font-bold tracking-wide">Audiory Smart Assistant</h1>
             </div>
-            <span class="text-xs bg-black/30 px-3 py-1 rounded-full text-purple-200 uppercase font-semibold">Local Llama3.2 Stream Mode</span>
+            <span class="text-xs bg-black/30 px-3 py-1 rounded-full text-purple-200 uppercase font-semibold">Audiory Producer Suite</span>
         </div>
 
+        <!-- Chat Container -->
         <div id="chatBox" class="chat-box flex-1 p-6 overflow-y-auto space-y-4 flex flex-col">
+            <!-- Bot Intro Message -->
             <div class="flex items-start space-x-3 max-w-[85%] self-start">
                 <div class="bg-purple-600 text-white rounded-2xl px-4 py-3 shadow-md rounded-tl-none">
-                    <p class="text-sm">What's good fam! I'm live and plugged into the Audiory catalog. Ask me to find beats by genre, mood, BPM, or ask any platform questions. 🎧</p>
+                    <p class="text-sm">What's good fam! I'm your AI Producer Assistant. Ask me to find database beats, generate promotional descriptions, run auto-tagging, explain the audio analyzer, or type "Generate me a cover" to design cover art! 🎧</p>
                 </div>
             </div>
         </div>
 
+        <!-- Input Form Footer -->
         <form id="chatForm" class="p-4 bg-gray-950 border-t border-gray-800 flex items-center space-x-3">
-            <input type="text" id="userInput" placeholder="Ask for a dark trap beat, afrobeat vibes, or upload policies..." 
+            <input type="text" id="userInput" placeholder="Ask for a beat, request a description, or type 'Generate me a cover'..." 
                    class="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500 transition-colors placeholder-gray-500 text-white" required autocomplete="off">
             <button type="submit" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl px-5 py-3 text-sm hover:opacity-90 active:scale-95 transition-all">
                 Send
@@ -49,55 +53,60 @@
             const message = userInput.value.trim();
             if(!message) return;
 
-            // 1. Append User Message visually
+            // 1. Append User Message
             appendMessage(message, 'user');
             userInput.value = '';
 
-            // 2. Create blank bot response element placeholder for the incoming stream
+            // 2. Setup placeholder bubble
             const botMessageId = createEmptyBotBubble();
             const textContainer = document.querySelector(`#${botMessageId} .msg-content`);
 
             try {
-                // 3. Post user chat query to our local Express agent
                 const response = await fetch('http://localhost:5000/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message })
                 });
 
-                if (!response.ok) throw new Error("Server connection issue");
+                if (!response.ok) throw new Error("Server issue");
 
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let accumulatedText = "";
+                // Check content type to see if backend bypassed streaming for a flat JSON block (Cover Generator Mode)
+                const contentType = response.headers.get('content-type');
+                
+                if (contentType && contentType.includes('application/json')) {
+                    // Handle Flat JSON (Cover Art Generation Data)
+                    const data = await response.json();
+                    renderCoverArtCard(textContainer, data.reply);
+                } else {
+                    // Handle Live Text Stream (Chat, Descriptions, Analyzer Info)
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let accumulatedText = "";
 
-                // 4. Read incoming text stream chunks step-by-step
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) break;
+                    while (true) {
+                        const { value, done } = await reader.read();
+                        if (done) break;
 
-                    const chunk = decoder.decode(value, { stream: true });
-                    const lines = chunk.split('\n');
+                        const chunk = decoder.decode(value, { stream: true });
+                        const lines = chunk.split('\n');
 
-                    for (const line of lines) {
-                        if (line.startsWith('data: ')) {
-                            try {
-                                const parsed = JSON.parse(line.slice(6));
-                                if (parsed.text) {
-                                    accumulatedText += parsed.text;
-                                    // Live update text element and auto-link URLs on the fly
-                                    textContainer.innerHTML = formatLinks(accumulatedText);
-                                    chatBox.scrollTop = chatBox.scrollHeight;
-                                }
-                            } catch (e) {
-                                // Skip broken or partial transmission lines cleanly
+                        for (const line of lines) {
+                            if (line.startsWith('data: ')) {
+                                try {
+                                    const parsed = JSON.parse(line.slice(6));
+                                    if (parsed.text) {
+                                        accumulatedText += parsed.text;
+                                        textContainer.innerHTML = formatLinks(accumulatedText);
+                                        chatBox.scrollTop = chatBox.scrollHeight;
+                                    }
+                                } catch (e) {}
                             }
                         }
                     }
                 }
             } catch (error) {
                 if (textContainer) {
-                    textContainer.innerText = "Couldn't reach the local backend. Ensure your node server is running on your laptop.";
+                    textContainer.innerText = "Error interacting with backend engine. Verify server terminal status.";
                     textContainer.parentElement.className = "bg-red-950/50 border border-red-900 text-red-300 rounded-2xl px-4 py-3 text-sm";
                 }
             }
@@ -107,11 +116,9 @@
             const id = 'msg-' + Math.random().toString(36).substr(2, 9);
             const container = document.createElement('div');
             container.id = id;
-            const formattedText = formatLinks(text);
-            
             if (sender === 'user') {
                 container.className = "flex items-start justify-end w-full space-x-3 max-w-[85%] self-end";
-                container.innerHTML = `<div class="bg-gray-800 text-gray-100 rounded-2xl px-4 py-3 shadow-md rounded-tr-none text-sm whitespace-pre-line">${formattedText}</div>`;
+                container.innerHTML = `<div class="bg-gray-800 text-gray-100 rounded-2xl px-4 py-3 shadow-md rounded-tr-none text-sm whitespace-pre-line">${formatLinks(text)}</div>`;
             }
             chatBox.appendChild(container);
             chatBox.scrollTop = chatBox.scrollHeight;
@@ -123,11 +130,46 @@
             const container = document.createElement('div');
             container.id = id;
             container.className = "flex items-start space-x-3 max-w-[85%] self-start";
-            container.innerHTML = `<div class="msg-content bg-purple-900/40 border border-purple-800/60 text-gray-200 rounded-2xl px-4 py-3 shadow-md rounded-tl-none text-sm whitespace-pre-line"><span class="animate-pulse text-gray-500 italic text-xs">AI is analyzing the tracklist...</span></div>`;
+            container.innerHTML = `<div class="msg-content bg-purple-900/40 border border-purple-800/60 text-gray-200 rounded-2xl px-4 py-3 shadow-md rounded-tl-none text-sm whitespace-pre-line"><span class="animate-pulse text-gray-500 italic text-xs">AI processing request parameters...</span></div>`;
             
             chatBox.appendChild(container);
             chatBox.scrollTop = chatBox.scrollHeight;
             return id;
+        }
+
+        // Beautifully displays the structured cover art data card instead of raw code strings
+        function renderCoverArtCard(targetElement, rawJsonString) {
+            try {
+                // Strip out any potential markdown code blocks the LLM wrapped around the JSON block
+                const cleanJson = rawJsonString.replace(/```json|
+```/g, '').trim();
+                const artData = JSON.parse(cleanJson);
+                
+                targetElement.innerHTML = `
+                    <div class="p-2">
+                        <div class="flex items-center space-x-2 text-purple-400 font-bold mb-1 text-xs tracking-wider uppercase">
+                            <span>🎨 Cover Design Blueprint Generated</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white mb-2">Project Asset: "${artData.title}"</h4>
+                        <p class="text-xs text-gray-400 bg-black/40 p-3 border border-gray-800 rounded-xl italic mb-3 leading-relaxed">
+                            "${artData.prompt}"
+                        </p>
+                        <button onclick="triggerImageGeneration('${btoa(artData.prompt)}')" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-90 active:scale-[0.98] transition-all text-white font-semibold py-2 px-4 rounded-xl text-xs shadow">
+                            Generate Cover Art Image
+                        </button>
+                    </div>
+                `;
+            } catch (err) {
+                // Fallback rendering in case string structure wasn't clean JSON array
+                targetElement.innerHTML = formatLinks(rawJsonString);
+            }
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Placeholder wrapper logic for image generation APIs (DALL-E 3, Midjourney, etc.)
+        function triggerImageGeneration(encodedPrompt) {
+            const decodedPrompt = atob(encodedPrompt);
+            alert(`Ready to pass this prompt engine pipeline to your DALL-E/Midjourney API setup:\n\n"${decodedPrompt}"`);
         }
 
         function formatLinks(text) {
