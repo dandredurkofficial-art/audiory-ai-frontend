@@ -49,11 +49,9 @@
             const message = userInput.value.trim();
             if(!message) return;
 
-            // 1. Append User Message
             appendMessage(message, 'user');
             userInput.value = '';
 
-            // 2. Setup placeholder bubble
             const botMessageId = createEmptyBotBubble();
             const textContainer = document.querySelector(`#${botMessageId} .msg-content`);
 
@@ -66,21 +64,13 @@
 
                 if (!response.ok) throw new Error("Server issue");
 
-                // Read incoming text segment payloads safely
                 const rawText = await response.text();
                 
-                let jsonData = null;
-                try {
-                    jsonData = JSON.parse(rawText);
-                } catch(e) {
-                    // Raw string stream chunk fallback route
-                }
-
-                if (jsonData && jsonData.isCover) {
-                    // Structural layout formatting route for flat object cards
-                    renderCoverArtCard(textContainer, jsonData.reply);
+                // FORCE DETECT: If the incoming message text contains JSON parameters, intercept immediately
+                if (rawText.includes('"prompt":') || rawText.includes('"title":')) {
+                    renderCoverArtCard(textContainer, rawText);
                 } else {
-                    // Line-by-line line assembly routing for traditional chunk tracking
+                    // Otherwise, execute regular line-by-line streaming display
                     const lines = rawText.split('\n');
                     let accumulatedText = "";
 
@@ -132,6 +122,7 @@
 
         function renderCoverArtCard(targetElement, rawJsonString) {
             try {
+                // Strip out markdown formatting if the model wrapped it inside code block backticks
                 const cleanJson = rawJsonString.replace(/```json|```/g, '').trim();
                 const artData = JSON.parse(cleanJson);
                 
@@ -150,6 +141,7 @@
                     </div>
                 `;
             } catch (err) {
+                // If it fails to parse cleanly, print the raw message so it doesn't leave an empty space
                 targetElement.innerHTML = formatLinks(rawJsonString);
             }
             chatBox.scrollTop = chatBox.scrollHeight;
