@@ -14,19 +14,15 @@
 <body class="font-sans min-h-screen flex flex-col items-center justify-center p-4">
 
     <div class="w-full max-w-2xl bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[600px]">
-        <!-- Header -->
         <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 flex items-center justify-between shadow-lg">
             <div class="flex items-center space-x-3">
                 <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                 <h1 class="text-xl font-bold tracking-wide">Audiory Smart Assistant</h1>
             </div>
-            <!-- Updated to display Llama 3.2 -->
-            <span class="text-xs bg-black/30 px-3 py-1 rounded-full text-purple-200 uppercase font-semibold">Local Llama3.2 Mode</span>
+            <span class="text-xs bg-black/30 px-3 py-1 rounded-full text-purple-200 uppercase font-semibold">Local Llama3.2 Stream Mode</span>
         </div>
 
-        <!-- Chat Container (Added flex flex-col to force bubble alignments) -->
         <div id="chatBox" class="chat-box flex-1 p-6 overflow-y-auto space-y-4 flex flex-col">
-            <!-- Bot Intro Message -->
             <div class="flex items-start space-x-3 max-w-[85%] self-start">
                 <div class="bg-purple-600 text-white rounded-2xl px-4 py-3 shadow-md rounded-tl-none">
                     <p class="text-sm">What's good fam! I'm live and plugged into the Audiory catalog. Ask me to find beats by genre, mood, BPM, or ask any platform questions. 🎧</p>
@@ -34,7 +30,6 @@
             </div>
         </div>
 
-        <!-- Input Form Footer -->
         <form id="chatForm" class="p-4 bg-gray-950 border-t border-gray-800 flex items-center space-x-3">
             <input type="text" id="userInput" placeholder="Ask for a dark trap beat, afrobeat vibes, or upload policies..." 
                    class="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500 transition-colors placeholder-gray-500 text-white" required autocomplete="off">
@@ -58,28 +53,53 @@
             appendMessage(message, 'user');
             userInput.value = '';
 
-            // 2. Append Loading indicator
-            const loadingId = appendMessage('AI is analyzing the tracklist...', 'loading');
+            // 2. Create blank bot response element placeholder for the incoming stream
+            const botMessageId = createEmptyBotBubble();
+            const textContainer = document.querySelector(`#${botMessageId} .msg-content`);
 
             try {
-                // 3. Post user chat query to our local Express agent running on your laptop
+                // 3. Post user chat query to our local Express agent
                 const response = await fetch('http://localhost:5000/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message })
                 });
-                const data = await response.json();
 
-                // Remove loading block and inject actual AI answer strings
-                const loadingEl = document.getElementById(loadingId);
-                if (loadingEl) loadingEl.remove();
-                
-                appendMessage(data.reply || "My bad, something tripped up the signal.", 'bot');
+                if (!response.ok) throw new Error("Server connection issue");
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let accumulatedText = "";
+
+                // 4. Read incoming text stream chunks step-by-step
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n');
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const parsed = JSON.parse(line.slice(6));
+                                if (parsed.text) {
+                                    accumulatedText += parsed.text;
+                                    // Live update text element and auto-link URLs on the fly
+                                    textContainer.innerHTML = formatLinks(accumulatedText);
+                                    chatBox.scrollTop = chatBox.scrollHeight;
+                                }
+                            } catch (e) {
+                                // Skip broken or partial transmission lines cleanly
+                            }
+                        }
+                    }
+                }
             } catch (error) {
-                const loadingEl = document.getElementById(loadingId);
-                if (loadingEl) loadingEl.remove();
-                
-                appendMessage("Couldn't reach the local backend. Ensure your node server is running on your laptop.", 'error');
+                if (textContainer) {
+                    textContainer.innerText = "Couldn't reach the local backend. Ensure your node server is running on your laptop.";
+                    textContainer.parentElement.className = "bg-red-950/50 border border-red-900 text-red-300 rounded-2xl px-4 py-3 text-sm";
+                }
             }
         });
 
@@ -87,36 +107,29 @@
             const id = 'msg-' + Math.random().toString(36).substr(2, 9);
             const container = document.createElement('div');
             container.id = id;
-            
-            // Format links dynamically so users can click database track links
             const formattedText = formatLinks(text);
             
             if (sender === 'user') {
-                // Fixed: Explicit self-end utilities keep user messages locked to the right side
                 container.className = "flex items-start justify-end w-full space-x-3 max-w-[85%] self-end";
                 container.innerHTML = `<div class="bg-gray-800 text-gray-100 rounded-2xl px-4 py-3 shadow-md rounded-tr-none text-sm whitespace-pre-line">${formattedText}</div>`;
-            } else if (sender === 'loading') {
-                container.className = "flex items-start space-x-3 max-w-[85%] text-gray-500 text-xs italic animate-pulse py-1 self-start";
-                container.innerText = text;
-            } else if (sender === 'error') {
-                container.className = "flex items-start space-x-3 max-w-[85%] self-start";
-                container.innerHTML = `<div class="bg-red-950/50 border border-red-900 text-red-300 rounded-2xl px-4 py-3 text-sm">${formattedText}</div>`;
-            } else {
-                container.className = "flex items-start space-x-3 max-w-[85%] self-start";
-                container.innerHTML = `<div class="bg-purple-900/40 border border-purple-800/60 text-gray-200 rounded-2xl px-4 py-3 shadow-md rounded-tl-none text-sm whitespace-pre-line">${formattedText}</div>`;
             }
-
             chatBox.appendChild(container);
-            
-            // Dynamic scroll animation frame fix
-            setTimeout(() => {
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 50);
-
+            chatBox.scrollTop = chatBox.scrollHeight;
             return id;
         }
 
-        // Helper function to turn URL text string chains into clickable target blank links
+        function createEmptyBotBubble() {
+            const id = 'msg-' + Math.random().toString(36).substr(2, 9);
+            const container = document.createElement('div');
+            container.id = id;
+            container.className = "flex items-start space-x-3 max-w-[85%] self-start";
+            container.innerHTML = `<div class="msg-content bg-purple-900/40 border border-purple-800/60 text-gray-200 rounded-2xl px-4 py-3 shadow-md rounded-tl-none text-sm whitespace-pre-line"><span class="animate-pulse text-gray-500 italic text-xs">AI is analyzing the tracklist...</span></div>`;
+            
+            chatBox.appendChild(container);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return id;
+        }
+
         function formatLinks(text) {
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             return text.replace(urlRegex, (url) => {
