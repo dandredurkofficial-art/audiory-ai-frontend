@@ -14,7 +14,6 @@
 <body class="font-sans min-h-screen flex flex-col items-center justify-center p-4">
 
     <div class="w-full max-w-2xl bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[600px]">
-        <!-- Header -->
         <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 flex items-center justify-between shadow-lg">
             <div class="flex items-center space-x-3">
                 <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
@@ -23,9 +22,7 @@
             <span class="text-xs bg-black/30 px-3 py-1 rounded-full text-purple-200 uppercase font-semibold">Audiory Producer Suite</span>
         </div>
 
-        <!-- Chat Container -->
         <div id="chatBox" class="chat-box flex-1 p-6 overflow-y-auto space-y-4 flex flex-col">
-            <!-- Bot Intro Message -->
             <div class="flex items-start space-x-3 max-w-[85%] self-start">
                 <div class="bg-purple-600 text-white rounded-2xl px-4 py-3 shadow-md rounded-tl-none">
                     <p class="text-sm">What's good fam! I'm your AI Producer Assistant. Ask me to find database beats, generate promotional descriptions, run auto-tagging, explain the audio analyzer, or type "Generate me a cover" to design cover art! 🎧</p>
@@ -33,7 +30,6 @@
             </div>
         </div>
 
-        <!-- Input Form Footer -->
         <form id="chatForm" class="p-4 bg-gray-950 border-t border-gray-800 flex items-center space-x-3">
             <input type="text" id="userInput" placeholder="Ask for a beat, request a description, or type 'Generate me a cover'..." 
                    class="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500 transition-colors placeholder-gray-500 text-white" required autocomplete="off">
@@ -70,15 +66,14 @@
 
                 if (!response.ok) throw new Error("Server issue");
 
-                // Check content type to see if backend bypassed streaming for a flat JSON block (Cover Generator Mode)
                 const contentType = response.headers.get('content-type');
                 
                 if (contentType && contentType.includes('application/json')) {
-                    // Handle Flat JSON (Cover Art Generation Data)
+                    // Handle Flat JSON (Cover Art Blueprint)
                     const data = await response.json();
                     renderCoverArtCard(textContainer, data.reply);
                 } else {
-                    // Handle Live Text Stream (Chat, Descriptions, Analyzer Info)
+                    // Handle Live Text Stream
                     const reader = response.body.getReader();
                     const decoder = new TextDecoder();
                     let accumulatedText = "";
@@ -137,12 +132,9 @@
             return id;
         }
 
-        // Beautifully displays the structured cover art data card instead of raw code strings
         function renderCoverArtCard(targetElement, rawJsonString) {
             try {
-                // Strip out any potential markdown code blocks the LLM wrapped around the JSON block
-                const cleanJson = rawJsonString.replace(/```json|
-```/g, '').trim();
+                const cleanJson = rawJsonString.replace(/```json|```/g, '').trim();
                 const artData = JSON.parse(cleanJson);
                 
                 targetElement.innerHTML = `
@@ -154,21 +146,19 @@
                         <p class="text-xs text-gray-400 bg-black/40 p-3 border border-gray-800 rounded-xl italic mb-3 leading-relaxed">
                             "${artData.prompt}"
                         </p>
-                        <button onclick="triggerImageGeneration('${btoa(artData.prompt)}')" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-90 active:scale-[0.98] transition-all text-white font-semibold py-2 px-4 rounded-xl text-xs shadow">
+                        <button onclick="triggerImageGeneration('${btoa(unescape(encodeURIComponent(artData.prompt)))}')" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-90 active:scale-[0.98] transition-all text-white font-semibold py-2 px-4 rounded-xl text-xs shadow">
                             Generate Cover Art Image
                         </button>
                     </div>
                 `;
             } catch (err) {
-                // Fallback rendering in case string structure wasn't clean JSON array
                 targetElement.innerHTML = formatLinks(rawJsonString);
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Placeholder wrapper logic for image generation APIs (DALL-E 3, Midjourney, etc.)
         function triggerImageGeneration(encodedPrompt) {
-            const decodedPrompt = atob(encodedPrompt);
+            const decodedPrompt = decodeURIComponent(escape(atob(encodedPrompt)));
             alert(`Ready to pass this prompt engine pipeline to your DALL-E/Midjourney API setup:\n\n"${decodedPrompt}"`);
         }
 
