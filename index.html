@@ -11,10 +11,19 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #111827; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #374151; border-radius: 9999px; }
         pre code { font-family: 'Courier New', Courier, monospace; }
+        
+        /* Clean Markdown Prose Formatting Overrides */
+        .prose-custom p { margin-bottom: 0.75rem; }
+        .prose-custom p:last-child { margin-bottom: 0; }
+        .prose-custom ul, .prose-custom ol { margin-left: 1.25rem; margin-bottom: 0.75rem; list-style-type: decimal; }
+        .prose-custom ul { list-style-type: disc; }
+        .prose-custom li { margin-bottom: 0.25rem; }
+        .prose-custom strong { color: #f3f4f6; font-weight: 600; }
     </style>
 </head>
-<body class="font-sans antialiased min-h-screen flex bg-gradient-to-br from-gray-950 via-[#0a0e17] to-gray-950 overflow-hidden">
+<body class="font-sans antialiased h-screen max-h-screen w-screen overflow-hidden flex bg-gradient-to-br from-gray-950 via-[#0a0e17] to-gray-950">
 
+    <!-- Mobile Header/Navigation bar -->
     <div class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-gray-900/90 border-b border-gray-800 flex items-center justify-between px-4 z-40 backdrop-blur-md">
         <div class="flex items-center space-x-3">
             <button id="sidebarToggle" class="p-2 text-gray-400 hover:text-white rounded-lg focus:outline-none">
@@ -27,7 +36,8 @@
         </button>
     </div>
 
-    <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 lg:static lg:flex flex-col w-72 bg-gray-900 border-r border-gray-800 z-50 transition-transform duration-300 ease-in-out pt-16 lg:pt-0">
+    <!-- Sidebar Element (Recent History Control Matrix) -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 lg:static lg:flex flex-col w-72 bg-gray-900 border-r border-gray-800 z-50 transition-transform duration-300 ease-in-out pt-16 lg:pt-0 h-full flex-shrink-0">
         <div class="hidden lg:flex p-5 items-center justify-between border-b border-gray-800">
             <div class="flex items-center space-x-2">
                 <div class="w-2.5 h-2.5 bg-blue-500 rounded-full shadow-[0_0_10px_#3b82f6]"></div>
@@ -39,7 +49,7 @@
         <div class="p-4">
             <button id="newChatDesktopBtn" class="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl py-3 px-4 text-sm hover:opacity-95 shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                <span>New Creative Workspace</span>
+                <span>New Workspace</span>
             </button>
         </div>
 
@@ -49,16 +59,17 @@
         </div>
 
         <div class="p-4 border-t border-gray-800 bg-gray-950/40 text-center text-xs text-gray-500">
-            Audiory Professional Automation Engine
+            Audiory Automation Engine
         </div>
     </aside>
 
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden backdrop-blur-sm"></div>
 
-    <main class="flex-1 flex flex-col min-w-0 pt-16 lg:pt-0 relative">
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-900/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+    <!-- Main Workspace Viewport Framework -->
+    <main class="flex-1 flex flex-col min-w-0 h-full relative pt-16 lg:pt-0 overflow-hidden">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-900/5 rounded-full filter blur-[120px] pointer-events-none"></div>
 
-        <header class="hidden lg:flex items-center justify-between px-8 py-4 bg-gray-900/30 border-b border-gray-800/80 backdrop-blur-md">
+        <header class="hidden lg:flex items-center justify-between px-8 py-4 bg-gray-900/30 border-b border-gray-800/80 backdrop-blur-md flex-shrink-0">
             <div class="flex items-center space-x-3">
                 <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_12px_#34d399]"></div>
                 <h1 class="text-lg font-bold tracking-wide text-white">Advanced System Core</h1>
@@ -68,17 +79,19 @@
             </div>
         </header>
 
-        <div id="chatBox" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 flex flex-col custom-scrollbar relative z-10">
-            <div class="flex items-start space-x-4 max-w-[85%] sm:max-w-[75%] self-start">
+        <!-- Message Scroll Window Frame Layout Fix -->
+        <div id="chatBox" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 flex flex-col custom-scrollbar relative z-10 min-h-0">
+            <div class="flex items-start space-x-4 max-w-[85%] sm:max-w-[80%] self-start">
                 <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
-                <div class="bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm">
+                <div class="bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm prose-custom">
                     <p class="font-semibold text-blue-400 mb-1">Audiory Elite Intelligence System Online.</p>
                     <p class="text-gray-300">I have been upgraded beyond basic inventory discovery. I can now write secure code blocks, map out database models, structure web application routing, build marketplace marketing architectures, and debug environment configurations. What are we building or optimization checking today?</p>
                 </div>
             </div>
         </div>
 
-        <div class="p-4 sm:p-6 bg-gradient-to-t from-gray-950 via-gray-950/90 to-transparent border-t border-gray-800/60 relative z-10">
+        <!-- Stable Console Base Input Layout Section -->
+        <div class="p-4 sm:p-6 bg-gradient-to-t from-gray-950 via-gray-950/90 to-transparent border-t border-gray-800/60 flex-shrink-0 relative z-10">
             <form id="chatForm" class="max-w-4xl mx-auto bg-gray-900/90 border border-gray-800 rounded-2xl p-2 flex items-center gap-2 focus-within:border-blue-500/60 focus-within:ring-1 focus-within:ring-blue-500/30 transition-all shadow-2xl backdrop-blur-md">
                 <input type="text" id="userInput" placeholder="Ask for marketplace beats, request code scripts, or optimize architectural blocks..." 
                        class="flex-1 bg-transparent px-4 py-3 text-sm focus:outline-none placeholder-gray-500 text-white" required autocomplete="off">
@@ -146,6 +159,7 @@
                     renderCoverArtCard(textContainer, systemReply);
                 } else {
                     textContainer.innerHTML = formatResponsePayload(systemReply);
+                    textContainer.classList.add('prose-custom');
                 }
 
                 updateSessionStorage(message, systemReply);
@@ -155,14 +169,14 @@
                     textContainer.innerHTML = `<span class="text-red-400 font-semibold block mb-1">Gateway Execution Exception</span> Ensure you unlocked temporary access at <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank" class="underline text-blue-400">cors-anywhere demo portal</a>.`;
                 }
             } finally {
-                chatBox.scrollTop = chatBox.scrollHeight;
+                setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 50);
             }
         });
 
         function appendMessage(text, sender, isHistorical = false) {
             const container = document.createElement('div');
             if (sender === 'user') {
-                container.className = "flex items-start justify-end w-full space-x-3 max-w-[85%] sm:max-w-[75%] self-end animate-fade-in";
+                container.className = "flex items-start justify-end w-full space-x-3 max-w-[85%] sm:max-w-[80%] self-end animate-fade-in";
                 container.innerHTML = `
                     <div class="bg-gradient-to-r from-blue-600/90 to-purple-600/90 border border-blue-500/30 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tr-none text-sm whitespace-pre-line leading-relaxed backdrop-blur-sm">
                         ${text}
@@ -170,23 +184,23 @@
                     <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center font-bold text-xs text-gray-300 shadow-md">ME</div>
                 `;
             } else {
-                container.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[75%] self-start";
+                container.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[80%] self-start";
                 container.innerHTML = `
                     <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
-                    <div class="bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm">
+                    <div class="msg-content bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm prose-custom">
                         ${formatResponsePayload(text)}
                     </div>
                 `;
             }
             chatBox.appendChild(container);
-            if (!isHistorical) chatBox.scrollTop = chatBox.scrollHeight;
+            if (!isHistorical) setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 50);
         }
 
         function createEmptyBotBubble() {
             const id = 'msg-' + Math.random().toString(36).substr(2, 9);
             const container = document.createElement('div');
             container.id = id;
-            container.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[75%] self-start animate-fade-in";
+            container.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[80%] self-start animate-fade-in";
             container.innerHTML = `
                 <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
                 <div class="msg-content bg-blue-950/20 border border-blue-800/40 text-gray-300 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm">
@@ -197,20 +211,32 @@
                 </div>
             `;
             chatBox.appendChild(container);
-            chatBox.scrollTop = chatBox.scrollHeight;
+            setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 50);
             return id;
         }
 
-        // Core Text Formatting + Code Block Parsing Engine Module
         function formatResponsePayload(text) {
-            // Replace markdown links with secure anchor links
+            // Render markdown lists cleanly
+            let formatted = text;
+            
+            // Format standard numbered list lines
+            formatted = formatted.replace(/^\s*\d+\.\s+\*\*(.*?)\*\*(.*)$/gm, '<li><strong>$1</strong>$2</li>');
+            formatted = formatted.replace(/(<li>.*<\/li>)/s, '<ol class="list-decimal">$1</ol>');
+            
+            // Format bullet lists
+            formatted = formatted.replace(/^\s*[\-\*]\s+\*\*(.*?)\*\*(.*)$/gm, '<li><strong>$1</strong>$2</li>');
+            
+            // Standard bold formatting conversion rules
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+            // Format raw URL configurations
             const urlRegex = /(https?:\/\/[^\s]+)/g;
-            let formatted = text.replace(urlRegex, (url) => {
-                if(url.endsWith('*') || url.endsWith(')')) return url; // guard parsing checks
+            formatted = formatted.replace(urlRegex, (url) => {
+                if(url.endsWith('*') || url.endsWith(')')) return url;
                 return `<a href="${url}" target="_blank" class="text-blue-400 hover:text-blue-300 underline font-medium break-all transition-colors">${url}</a>`;
             });
 
-            // Advanced Parse Regex to extract and build styled syntax block windows
+            // Codeblock construction parser
             const codeBlockRegex = /```([\s\S]*?)```/g;
             formatted = formatted.replace(codeBlockRegex, (match, codeContent) => {
                 const lines = codeContent.trim().split('\n');
@@ -240,9 +266,9 @@
                 targetElement.innerHTML = `
                     <div class="p-1">
                         <div class="flex items-center space-x-2 text-emerald-400 font-bold mb-2 text-xs tracking-wider uppercase">
-                            <span>🎨 Automation Template Engine Ready</span>
+                            <span>🎨 Template Engine Active</span>
                         </div>
-                        <h4 class="text-base font-bold text-white mb-2">Asset Context: "${artData.title}"</h4>
+                        <h4 class="text-base font-bold text-white mb-2">Context: "${artData.title}"</h4>
                         <p class="text-xs text-gray-400 bg-black/40 p-3 border border-gray-800 rounded-xl italic mb-4 leading-relaxed">"${artData.prompt}"</p>
                         <button onclick="alert('Asset script piped successfully.')" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-2.5 px-4 rounded-xl text-xs shadow-md">
                             Execute Deployment Flow
@@ -269,9 +295,9 @@
 
         function clearChatInterface() {
             chatBox.innerHTML = `
-                <div class="flex items-start space-x-4 max-w-[85%] sm:max-w-[75%] self-start animate-fade-in">
+                <div class="flex items-start space-x-4 max-w-[85%] sm:max-w-[80%] self-start animate-fade-in">
                     <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
-                    <div class="bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm">
+                    <div class="bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm prose-custom">
                         <p>New sandbox architecture workspace initialized. Define the scope or requirements you want processed.</p>
                     </div>
                 </div>
@@ -281,7 +307,6 @@
         function updateSessionStorage(query, response) {
             const session = sessions.find(s => s.id === currentSessionId);
             if (session) {
-                // FIXED: Explicitly assigns the structural textual context instead of capturing event structures
                 if (session.title === "New Automation Session" && query) {
                     session.title = query.length > 22 ? query.substr(0, 22) + '...' : query;
                 }
@@ -302,12 +327,12 @@
                     appendMessage(chat.response, 'bot', true);
                 });
             }
-            chatBox.scrollTop = chatBox.scrollHeight;
+            setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 50);
             renderHistoryUI();
         }
 
         function deleteSession(id, event) {
-            event.stopPropagation(); // Stop window selection bubbling execution drops
+            event.stopPropagation();
             sessions = sessions.filter(s => s.id !== id);
             if (currentSessionId === id) {
                 currentSessionId = sessions.length > 0 ? sessions[0].id : null;
@@ -341,7 +366,6 @@
                 
                 const item = document.createElement('div');
                 item.className = `group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium border cursor-pointer transition-all ${activeClasses}`;
-                // Set explicit wrapper function parameters instead of relying on broken event delegation bindings
                 item.addEventListener('click', () => switchSession(session.id));
                 
                 item.innerHTML = `
@@ -354,9 +378,7 @@
                     </button>
                 `;
                 
-                // Keep the button delete functionality clear and explicitly separated
                 item.querySelector('button').addEventListener('click', (e) => deleteSession(session.id, e));
-                
                 historyList.appendChild(item);
             });
         }
