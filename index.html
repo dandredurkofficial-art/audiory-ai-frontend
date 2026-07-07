@@ -3,110 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audiory Smart Assistant Hub</title>
+    <title>Audiory Elite AI Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #030712; color: #f3f4f6; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #111827; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #374151; border-radius: 9999px; }
+        pre code { font-family: 'Courier New', Courier, monospace; }
     </style>
 </head>
-<body class="font-sans antialiased min-h-screen flex bg-gradient-to-br from-gray-950 via-[#0b0f19] to-gray-950 overflow-hidden">
+<body class="font-sans antialiased min-h-screen flex bg-gradient-to-br from-gray-950 via-[#0a0e17] to-gray-950 overflow-hidden">
 
-    <!-- Mobile Header/Navigation bar -->
     <div class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-gray-900/90 border-b border-gray-800 flex items-center justify-between px-4 z-40 backdrop-blur-md">
         <div class="flex items-center space-x-3">
-            <button id="sidebarToggle" class="p-2 text-gray-400 hover:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <button id="sidebarToggle" class="p-2 text-gray-400 hover:text-white rounded-lg focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
-            <span class="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">Audiory AI</span>
+            <span class="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Audiory Elite</span>
         </div>
-        <button id="newChatMobileBtn" class="bg-purple-600/20 text-purple-400 hover:bg-purple-600/30 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border border-purple-500/30">
-            + New Chat
+        <button id="newChatMobileBtn" class="bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border border-blue-500/30">
+            + New Task
         </button>
     </div>
 
-    <!-- Sidebar Element (Recent History Control Matrix) -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 lg:static lg:flex flex-col w-72 bg-gray-900 border-r border-gray-800 z-50 transition-transform duration-300 ease-in-out pt-16 lg:pt-0">
-        <!-- Sidebar Branding Header -->
         <div class="hidden lg:flex p-5 items-center justify-between border-b border-gray-800">
             <div class="flex items-center space-x-2">
-                <div class="w-2.5 h-2.5 bg-purple-500 rounded-full shadow-[0_0_10px_#a855f7]"></div>
-                <h2 class="font-bold text-lg tracking-wide bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Audiory Engine</h2>
+                <div class="w-2.5 h-2.5 bg-blue-500 rounded-full shadow-[0_0_10px_#3b82f6]"></div>
+                <h2 class="font-bold text-lg tracking-wide bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Audiory Elite Hub</h2>
             </div>
-            <span class="text-[10px] bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded-full border border-purple-500/20 font-bold tracking-widest uppercase">v2.5</span>
+            <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/20 font-bold tracking-widest">PRO</span>
         </div>
 
-        <!-- Action Base Controls -->
         <div class="p-4">
-            <button id="newChatDesktopBtn" class="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl py-3 px-4 text-sm hover:opacity-95 shadow-lg shadow-purple-900/20 active:scale-[0.98] transition-all">
+            <button id="newChatDesktopBtn" class="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl py-3 px-4 text-sm hover:opacity-95 shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                <span>New Session</span>
+                <span>New Creative Workspace</span>
             </button>
         </div>
 
-        <!-- Scrollable Session Container Area -->
         <div class="flex-1 overflow-y-auto px-3 space-y-1.5 custom-scrollbar">
-            <div class="text-[11px] font-bold text-gray-500 px-3 uppercase tracking-wider mb-2">Recent Consultations</div>
-            <div id="historyList" class="space-y-1">
-                <!-- Injected elements dynamic target framework loop -->
-            </div>
+            <div class="text-[11px] font-bold text-gray-500 px-3 uppercase tracking-wider mb-2">Workspace Logs</div>
+            <div id="historyList" class="space-y-1"></div>
         </div>
 
         <div class="p-4 border-t border-gray-800 bg-gray-950/40 text-center text-xs text-gray-500">
-            Audiory Producer Suite System Engine
+            Audiory Professional Automation Engine
         </div>
     </aside>
 
-    <!-- Sidebar Mobile Backdrop Overlay -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden backdrop-blur-sm"></div>
 
-    <!-- Main Workspace Frame Execution Interface Container -->
     <main class="flex-1 flex flex-col min-w-0 pt-16 lg:pt-0 relative">
-        <!-- Floating Ambient Glows -->
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-purple-900/10 rounded-full filter blur-[120px] pointer-events-none"></div>
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-900/10 rounded-full filter blur-[120px] pointer-events-none"></div>
 
-        <!-- System Stream Execution Control Dashboard Header -->
         <header class="hidden lg:flex items-center justify-between px-8 py-4 bg-gray-900/30 border-b border-gray-800/80 backdrop-blur-md">
             <div class="flex items-center space-x-3">
                 <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_12px_#34d399]"></div>
-                <h1 class="text-lg font-bold tracking-wide text-white">Audiory Smart Assistant</h1>
+                <h1 class="text-lg font-bold tracking-wide text-white">Advanced System Core</h1>
             </div>
             <div class="flex items-center space-x-4">
-                <span class="text-xs text-gray-400 bg-gray-800/60 border border-gray-700/50 px-3 py-1.5 rounded-xl font-medium">Model Core: Gemini-2.5-Flash</span>
+                <span class="text-xs text-gray-400 bg-gray-800/60 border border-gray-700/50 px-3 py-1.5 rounded-xl font-medium">Model Stack: Gemini-2.5 + CodeSaaS Interpreter</span>
             </div>
         </header>
 
-        <!-- Message Visualizer Container Array Stream Frame -->
         <div id="chatBox" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 flex flex-col custom-scrollbar relative z-10">
-            <!-- Initial Welcome Bubble Vector anchor component -->
-            <div class="flex items-start space-x-4 max-w-[85%] sm:max-w-[75%] self-start animate-fade-in">
-                <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-md shadow-purple-900/30">AI</div>
+            <div class="flex items-start space-x-4 max-w-[85%] sm:max-w-[75%] self-start">
+                <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
                 <div class="bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm">
-                    <p>What's good fam! I'm your AI Producer Assistant. Ask me to find database beats, generate promotional descriptions, run auto-tagging, explain the audio analyzer, or type "Generate me a cover" to design cover art! 🎧</p>
+                    <p class="font-semibold text-blue-400 mb-1">Audiory Elite Intelligence System Online.</p>
+                    <p class="text-gray-300">I have been upgraded beyond basic inventory discovery. I can now write secure code blocks, map out database models, structure web application routing, build marketplace marketing architectures, and debug environment configurations. What are we building or optimization checking today?</p>
                 </div>
             </div>
         </div>
 
-        <!-- System Message Input Submission Console Base Layout -->
         <div class="p-4 sm:p-6 bg-gradient-to-t from-gray-950 via-gray-950/90 to-transparent border-t border-gray-800/60 relative z-10">
-            <form id="chatForm" class="max-w-4xl mx-auto bg-gray-900/90 border border-gray-800 rounded-2xl p-2 flex items-center gap-2 focus-within:border-purple-500/60 focus-within:ring-1 focus-within:ring-purple-500/30 transition-all shadow-2xl backdrop-blur-md">
-                <input type="text" id="userInput" placeholder="Ask for a beat, request descriptions, or type 'Generate me a cover'..." 
+            <form id="chatForm" class="max-w-4xl mx-auto bg-gray-900/90 border border-gray-800 rounded-2xl p-2 flex items-center gap-2 focus-within:border-blue-500/60 focus-within:ring-1 focus-within:ring-blue-500/30 transition-all shadow-2xl backdrop-blur-md">
+                <input type="text" id="userInput" placeholder="Ask for marketplace beats, request code scripts, or optimize architectural blocks..." 
                        class="flex-1 bg-transparent px-4 py-3 text-sm focus:outline-none placeholder-gray-500 text-white" required autocomplete="off">
-                <button type="submit" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl px-6 py-3 text-sm hover:opacity-95 active:scale-95 shadow-md shadow-purple-900/20 transition-all flex items-center space-x-2 flex-shrink-0">
-                    <span>Send</span>
-                    <svg class="w-4 h-4 transform rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                <button type="submit" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl px-6 py-3 text-sm hover:opacity-95 active:scale-95 shadow-md shadow-blue-900/20 transition-all flex items-center space-x-2 flex-shrink-0">
+                    <span>Execute</span>
                 </button>
             </form>
         </div>
     </main>
 
     <script>
-        // System Endpoint Protocol Target Configuration Routing Node
         const API_URL = 'https://cors-anywhere.herokuapp.com/http://audiory-ai-backend-env.eba-krgcjbt4.eu-north-1.elasticbeanstalk.com/api/chat';
         
-        // Element Reference Cache Access Mapping
         const chatForm = document.getElementById('chatForm');
         const userInput = document.getElementById('userInput');
         const chatBox = document.getElementById('chatBox');
@@ -117,11 +102,9 @@
         const newChatDesktopBtn = document.getElementById('newChatDesktopBtn');
         const newChatMobileBtn = document.getElementById('newChatMobileBtn');
 
-        // State Machine Core Tracking Vectors
-        let sessions = JSON.parse(localStorage.getItem('audiory_ai_sessions')) || [];
-        let currentSessionId = localStorage.getItem('audiory_current_session_id') || null;
+        let sessions = JSON.parse(localStorage.getItem('audiory_elite_sessions')) || [];
+        let currentSessionId = localStorage.getItem('audiory_elite_current_id') || null;
 
-        // Mobile Responsive Layout Display Toggles
         function toggleSidebar() {
             sidebar.classList.toggle('-translate-x-full');
             sidebarOverlay.classList.toggle('hidden');
@@ -129,17 +112,14 @@
         sidebarToggle.addEventListener('click', toggleSidebar);
         sidebarOverlay.addEventListener('click', toggleSidebar);
 
-        // Session Lifecycle Event Registration Pipeline
-        newChatDesktopBtn.addEventListener('click', createNewSession);
+        newChatDesktopBtn.addEventListener('click', () => createNewSession());
         if (newChatMobileBtn) newChatMobileBtn.addEventListener('click', () => { createNewSession(); toggleSidebar(); });
 
-        // Core Chat Messaging Action Loop Handlers
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const message = userInput.value.trim();
             if(!message) return;
 
-            // Generate initial operational tracking session frame arrays if missing
             if (!currentSessionId) {
                 createNewSession(message);
             }
@@ -157,51 +137,44 @@
                     body: JSON.stringify({ message })
                 });
 
-                if (!response.ok) throw new Error("Server communication protocol dropped.");
+                if (!response.ok) throw new Error("Connection dropped.");
 
-                // FIXED: System runtime safely expects and evaluates the complete JSON block returned via your active environment parameters
                 const data = await response.json();
                 const systemReply = data.reply || '';
 
-                // Intercept data streams requesting system asset blueprint transformations
                 if (systemReply.includes('"prompt":') || systemReply.includes('"title":')) {
                     renderCoverArtCard(textContainer, systemReply);
                 } else {
-                    textContainer.innerHTML = formatLinks(systemReply);
+                    textContainer.innerHTML = formatResponsePayload(systemReply);
                 }
 
-                // Sync context history logging records back to internal persistence
                 updateSessionStorage(message, systemReply);
 
             } catch (error) {
                 if (textContainer) {
-                    textContainer.innerText = "Fatal connection exception from backend gateway core.";
-                    textContainer.parentElement.className = "bg-red-950/40 border border-red-900/60 text-red-300 rounded-2xl px-5 py-4 text-sm shadow-lg";
+                    textContainer.innerHTML = `<span class="text-red-400 font-semibold block mb-1">Gateway Execution Exception</span> Ensure you unlocked temporary access at <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank" class="underline text-blue-400">cors-anywhere demo portal</a>.`;
                 }
             } finally {
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
         });
 
-        // Appending text frame structural layouts directly inside target system viewports
         function appendMessage(text, sender, isHistorical = false) {
             const container = document.createElement('div');
-            const uniqueStamp = sender === 'user' ? 'USR' : 'AI';
-            
             if (sender === 'user') {
                 container.className = "flex items-start justify-end w-full space-x-3 max-w-[85%] sm:max-w-[75%] self-end animate-fade-in";
                 container.innerHTML = `
-                    <div class="bg-gradient-to-r from-purple-600/90 to-indigo-600/90 border border-purple-500/30 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tr-none text-sm whitespace-pre-line leading-relaxed backdrop-blur-sm">
-                        ${formatLinks(text)}
+                    <div class="bg-gradient-to-r from-blue-600/90 to-purple-600/90 border border-blue-500/30 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tr-none text-sm whitespace-pre-line leading-relaxed backdrop-blur-sm">
+                        ${text}
                     </div>
                     <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center font-bold text-xs text-gray-300 shadow-md">ME</div>
                 `;
             } else {
                 container.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[75%] self-start";
                 container.innerHTML = `
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-md shadow-purple-900/30">AI</div>
+                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
                     <div class="bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm">
-                        ${formatLinks(text)}
+                        ${formatResponsePayload(text)}
                     </div>
                 `;
             }
@@ -215,11 +188,11 @@
             container.id = id;
             container.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[75%] self-start animate-fade-in";
             container.innerHTML = `
-                <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-md">AI</div>
-                <div class="msg-content bg-purple-950/20 border border-purple-800/40 text-gray-300 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm">
+                <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
+                <div class="msg-content bg-blue-950/20 border border-blue-800/40 text-gray-300 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm">
                     <span class="flex items-center space-x-2 text-gray-500 italic text-xs">
-                        <svg class="animate-spin h-4 w-4 text-purple-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        <span>Analyzing metadata layers...</span>
+                        <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
+                        <span>Compiling processing vectors...</span>
                     </span>
                 </div>
             `;
@@ -228,46 +201,60 @@
             return id;
         }
 
-        // Deep Rendering Parsing Subsystem Core Modules
+        // Core Text Formatting + Code Block Parsing Engine Module
+        function formatResponsePayload(text) {
+            // Replace markdown links with secure anchor links
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            let formatted = text.replace(urlRegex, (url) => {
+                if(url.endsWith('*') || url.endsWith(')')) return url; // guard parsing checks
+                return `<a href="${url}" target="_blank" class="text-blue-400 hover:text-blue-300 underline font-medium break-all transition-colors">${url}</a>`;
+            });
+
+            // Advanced Parse Regex to extract and build styled syntax block windows
+            const codeBlockRegex = /```([\s\S]*?)```/g;
+            formatted = formatted.replace(codeBlockRegex, (match, codeContent) => {
+                const lines = codeContent.trim().split('\n');
+                let language = 'code';
+                if (lines[0].length < 12 && !lines[0].includes(' ') && lines[0].match(/^[a-zA-Z]+$/)) {
+                    language = lines.shift();
+                }
+                const cleanCode = lines.join('\n').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                return `
+                    <div class="my-4 border border-gray-800 rounded-xl overflow-hidden shadow-xl bg-gray-950/90 text-left">
+                        <div class="bg-gray-900 px-4 py-2 flex items-center justify-between border-b border-gray-800 text-[11px] text-gray-400 font-mono tracking-wide uppercase">
+                            <span>${language} block</span>
+                            <span class="text-gray-600">read-only</span>
+                        </div>
+                        <pre class="p-4 overflow-x-auto text-xs font-mono text-emerald-400 leading-relaxed custom-scrollbar"><code>${cleanCode}</code></pre>
+                    </div>
+                `;
+            });
+
+            return formatted;
+        }
+
         function renderCoverArtCard(targetElement, rawJsonString) {
             try {
                 const cleanJson = rawJsonString.replace(/```json|```/g, '').trim();
                 const artData = JSON.parse(cleanJson);
-                
                 targetElement.innerHTML = `
                     <div class="p-1">
                         <div class="flex items-center space-x-2 text-emerald-400 font-bold mb-2 text-xs tracking-wider uppercase">
-                            <span class="inline-block w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span>
-                            <span>🎨 Design Blueprint Synced</span>
+                            <span>🎨 Automation Template Engine Ready</span>
                         </div>
-                        <h4 class="text-base font-bold text-white mb-2">Project Asset: "${artData.title}"</h4>
-                        <p class="text-xs text-gray-400 bg-black/40 p-3 border border-gray-800 rounded-xl italic mb-4 leading-relaxed">
-                            "${artData.prompt}"
-                        </p>
-                        <button onclick="triggerImageGeneration('${btoa(unescape(encodeURIComponent(artData.prompt)))}')" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-95 active:scale-[0.99] transition-all text-white font-semibold py-2.5 px-4 rounded-xl text-xs shadow-md shadow-purple-900/20">
-                            Generate Cover Art Image
+                        <h4 class="text-base font-bold text-white mb-2">Asset Context: "${artData.title}"</h4>
+                        <p class="text-xs text-gray-400 bg-black/40 p-3 border border-gray-800 rounded-xl italic mb-4 leading-relaxed">"${artData.prompt}"</p>
+                        <button onclick="alert('Asset script piped successfully.')" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-2.5 px-4 rounded-xl text-xs shadow-md">
+                            Execute Deployment Flow
                         </button>
                     </div>
                 `;
             } catch (err) {
-                targetElement.innerHTML = formatLinks(rawJsonString);
+                targetElement.innerHTML = formatResponsePayload(rawJsonString);
             }
         }
 
-        function triggerImageGeneration(encodedPrompt) {
-            const decodedPrompt = decodeURIComponent(escape(atob(encodedPrompt)));
-            alert(`Passing structured prompt vector to creative automation pipeline:\n\n"${decodedPrompt}"`);
-        }
-
-        function formatLinks(text) {
-            const urlRegex = /(https?:\/\/[^\s]+)/g;
-            return text.replace(urlRegex, (url) => {
-                return `<a href="${url}" target="_blank" class="text-purple-400 hover:text-purple-300 underline font-medium break-all transition-colors">${url}</a>`;
-            });
-        }
-
-        // Persistent State Sub-system Architecture & Navigation Logic
-        function createNewSession(initialText = "Empty Consult") {
+        function createNewSession(initialText = "New Automation Session") {
             const truncateTitle = initialText.length > 22 ? initialText.substr(0, 22) + '...' : initialText;
             const newSession = {
                 id: 'session-' + Date.now(),
@@ -283,9 +270,9 @@
         function clearChatInterface() {
             chatBox.innerHTML = `
                 <div class="flex items-start space-x-4 max-w-[85%] sm:max-w-[75%] self-start animate-fade-in">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-md">AI</div>
+                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
                     <div class="bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm">
-                        <p>What's good fam! New workflow initialized. Fire away with your request! 🎧</p>
+                        <p>New sandbox architecture workspace initialized. Define the scope or requirements you want processed.</p>
                     </div>
                 </div>
             `;
@@ -294,7 +281,8 @@
         function updateSessionStorage(query, response) {
             const session = sessions.find(s => s.id === currentSessionId);
             if (session) {
-                if (session.title === "Empty Consult" && query) {
+                // FIXED: Explicitly assigns the structural textual context instead of capturing event structures
+                if (session.title === "New Automation Session" && query) {
                     session.title = query.length > 22 ? query.substr(0, 22) + '...' : query;
                 }
                 session.history.push({ query, response });
@@ -304,30 +292,14 @@
 
         function switchSession(id) {
             currentSessionId = id;
-            localStorage.setItem('audiory_current_session_id', id);
+            localStorage.setItem('audiory_elite_current_id', id);
             const session = sessions.find(s => s.id === id);
             
             clearChatInterface();
             if (session && session.history.length > 0) {
                 session.history.forEach(chat => {
                     appendMessage(chat.query, 'user', true);
-                    
-                    const botId = 'msg-' + Math.random().toString(36).substr(2, 9);
-                    const container = document.createElement('div');
-                    container.id = botId;
-                    container.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[75%] self-start";
-                    container.innerHTML = `
-                        <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-md">AI</div>
-                        <div class="msg-content bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm"></div>
-                    `;
-                    chatBox.appendChild(container);
-                    const contentArea = document.querySelector(`#${botId} .msg-content`);
-                    
-                    if (chat.response.includes('"prompt":') || chat.response.includes('"title":')) {
-                        renderCoverArtCard(contentArea, chat.response);
-                    } else {
-                        contentArea.innerHTML = formatLinks(chat.response);
-                    }
+                    appendMessage(chat.response, 'bot', true);
                 });
             }
             chatBox.scrollTop = chatBox.scrollHeight;
@@ -335,7 +307,7 @@
         }
 
         function deleteSession(id, event) {
-            event.stopPropagation(); // Avoid event cascading loops triggering session shifts
+            event.stopPropagation(); // Stop window selection bubbling execution drops
             sessions = sessions.filter(s => s.id !== id);
             if (currentSessionId === id) {
                 currentSessionId = sessions.length > 0 ? sessions[0].id : null;
@@ -349,8 +321,8 @@
         }
 
         function saveAndRefreshSessions() {
-            localStorage.setItem('audiory_ai_sessions', JSON.stringify(sessions));
-            localStorage.setItem('audiory_current_session_id', currentSessionId);
+            localStorage.setItem('audiory_elite_sessions', JSON.stringify(sessions));
+            localStorage.setItem('audiory_elite_current_id', currentSessionId);
             renderHistoryUI();
         }
 
@@ -364,26 +336,31 @@
             sessions.forEach(session => {
                 const isActive = session.id === currentSessionId;
                 const activeClasses = isActive 
-                    ? 'bg-purple-600/10 border-purple-500/30 text-white' 
+                    ? 'bg-blue-600/10 border-blue-500/30 text-white' 
                     : 'text-gray-400 hover:bg-gray-800/50 hover:text-gray-200 border-transparent';
                 
                 const item = document.createElement('div');
                 item.className = `group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium border cursor-pointer transition-all ${activeClasses}`;
-                item.setAttribute('onclick', `switchSession('${session.id}')`);
+                // Set explicit wrapper function parameters instead of relying on broken event delegation bindings
+                item.addEventListener('click', () => switchSession(session.id));
+                
                 item.innerHTML = `
                     <div class="flex items-center space-x-2.5 min-w-0">
-                        <svg class="w-3.5 h-3.5 flex-shrink-0 text-gray-500 group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        <svg class="w-3.5 h-3.5 flex-shrink-0 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                         <span class="truncate pr-2">${session.title}</span>
                     </div>
-                    <button onclick="deleteSession('${session.id}', event)" class="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-400 p-0.5 rounded transition-all">
+                    <button class="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-400 p-0.5 rounded transition-all">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
                 `;
+                
+                // Keep the button delete functionality clear and explicitly separated
+                item.querySelector('button').addEventListener('click', (e) => deleteSession(session.id, e));
+                
                 historyList.appendChild(item);
             });
         }
 
-        // App Initial Core Execution Lifecycle Spark
         if (currentSessionId && sessions.some(s => s.id === currentSessionId)) {
             switchSession(currentSessionId);
         } else {
