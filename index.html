@@ -196,9 +196,22 @@
             const botMessageId = createEmptyBotBubble();
             const textContainer = document.querySelector(`#${botMessageId} .msg-content`);
 
-            // INTERCEPT COMMAND: Cover Art Generation Router
-            if (message.toLowerCase().includes('/generate art')) {
-                let promptDescription = message.toLowerCase().split('/generate art')[1]?.trim();
+            // ROBUST COMMAND ROUTER: Intercepts "/generate art", "generate art", "/generate cover", or "generate cover"
+            const lowerMessage = message.toLowerCase();
+            const triggerWords = ['/generate art', 'generate art', '/generate cover', 'generate cover'];
+            
+            let isArtRequest = false;
+            let promptDescription = "";
+
+            for (const trigger of triggerWords) {
+                if (lowerMessage.includes(trigger)) {
+                    isArtRequest = true;
+                    promptDescription = message.substring(lowerMessage.indexOf(trigger) + trigger.length).trim();
+                    break;
+                }
+            }
+
+            if (isArtRequest) {
                 if (!promptDescription) promptDescription = "Premium music cover art abstract modern design";
                 
                 setTimeout(() => {
