@@ -196,10 +196,30 @@
             const botMessageId = createEmptyBotBubble();
             const textContainer = document.querySelector(`#${botMessageId} .msg-content`);
 
-            // ROBUST COMMAND ROUTER: Intercepts "/generate art", "generate art", "/generate cover", or "generate cover"
             const lowerMessage = message.toLowerCase();
+
+            // 1. HUMAN AGENT ROUTER ESCALATION KEYWORDS
+            const supportKeywords = ['human agent', 'talk to a human', 'connect me to an agent', 'live chat', 'real agent', 'talk to support', 'human support'];
+            let isSupportRequest = false;
+
+            for (const keyword of supportKeywords) {
+                if (lowerMessage.includes(keyword)) {
+                    isSupportRequest = true;
+                    break;
+                }
+            }
+
+            if (isSupportRequest) {
+                setTimeout(() => {
+                    renderAgentOfflineForm(textContainer);
+                    updateSessionStorage(message, "[System Redirected User to Support Mail Form Matrix due to Agents Offline]");
+                    clearAttachedImage();
+                }, 1500);
+                return;
+            }
+
+            // 2. ART COVER GENERATION ROUTER
             const triggerWords = ['/generate art', 'generate art', '/generate cover', 'generate cover'];
-            
             let isArtRequest = false;
             let promptDescription = "";
 
@@ -222,6 +242,7 @@
                 return;
             }
 
+            // 3. CORE MULTIMODAL AI AGENT INTERACTION
             try {
                 const currentSession = sessions.find(s => s.id === currentSessionId);
                 const contents = [];
@@ -267,7 +288,7 @@
                 setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 30);
             }
         });
-
+        
         function appendUserMessageBubble(text, imageSrc) {
             const container = document.createElement('div');
             container.className = "flex items-start justify-end w-full space-x-3 max-w-[85%] sm:max-w-[80%] self-end animate-fade-in";
@@ -324,6 +345,58 @@
             `;
             chatBox.scrollTop = chatBox.scrollHeight;
         }
+
+        function renderAgentOfflineForm(targetElement) {
+            targetElement.innerHTML = `
+                <div class="p-1 space-y-3">
+                    <div class="flex items-center space-x-2 text-amber-400 font-bold text-xs tracking-wider uppercase">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <span>Live Support Routing Matrix</span>
+                    </div>
+                    <p class="text-sm text-gray-300">All Audiory Desk human support lines are currently handling high production queue volume, or are offline outside business hours.</p>
+                    <div class="bg-gray-950/60 border border-gray-800 p-4 rounded-xl space-y-3">
+                        <span class="text-xs text-gray-400 block font-medium">Leave an offline support ticket payload below:</span>
+                        <div>
+                            <label class="block text-[10px] text-gray-500 uppercase tracking-wider mb-1">Your Email Address</label>
+                            <input type="email" id="ticketUserEmail" placeholder="producer@example.com" class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500/50">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-500 uppercase tracking-wider mb-1">Message / Issue Details</label>
+                            <textarea id="ticketUserMessage" rows="3" placeholder="Describe the problem with your license or beat store download..." class="w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-xs text-white focus:outline-none focus:border-purple-500/50 resize-none"></textarea>
+                        </div>
+                        <button type="button" onclick="window.submitSupportTicketForm(this)" class="w-full bg-gradient-to-r from-amber-600 to-red-600 text-white font-semibold py-2 px-4 rounded-lg text-xs shadow-md hover:opacity-90 transition-all">
+                            Dispatch Ticket to support@audiory.site
+                        </button>
+                    </div>
+                </div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Global function window mapping to handle click tracking safely across dynamic rendering frames
+        window.submitSupportTicketForm = function(buttonElement) {
+            const container = buttonElement.parentElement;
+            const email = container.querySelector('#ticketUserEmail').value.trim();
+            const bodyMessage = container.querySelector('#ticketUserMessage').value.trim();
+
+            if (!email || !bodyMessage) {
+                alert('Please fill out both the email and message fields before dispatching your ticket.');
+                return;
+            }
+
+            // Open user's client system email natively with targeted details
+            const mailtoUrl = `mailto:support@audiory.site?subject=Audiory Help Desk Escalation Request&body=Sender Email: ${encodeURIComponent(email)}%0A%0AMessage:%0A${encodeURIComponent(bodyMessage)}`;
+            window.location.href = mailtoUrl;
+
+            // Transmit visual update back to chat logs
+            const mainContentWrapper = container.parentElement;
+            mainContentWrapper.innerHTML = `
+                <div class="text-center p-2">
+                    <span class="text-emerald-400 font-bold text-xs block mb-1">✓ Ticket Prepared Successfully</span>
+                    <p class="text-xs text-gray-400">Your mail client has been summoned to deliver the log files to <strong>support@audiory.site</strong>. Our desk engineers will reply shortly.</p>
+                </div>
+            `;
+        };
 
         function formatResponsePayload(text) {
             let html = text;
