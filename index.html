@@ -111,7 +111,8 @@
         3. Maintain a confident, cutting-edge corporate tech specialist persona.`;
 
         // PASTE YOUR GEMINI API KEY COPIED FROM IMAGE_FEE2DA.PNG INSIDE THESE QUOTES:
-        const GEMINI_API_KEY = "QVEuQWI4Uk42SmNkQTlLYkYwYUJqTlExcXZDOUM3OGJobkZiR1BLcDAxRGdjZG52eUZwOWc="; 
+        const OBSFUCATED_KEY = "QVEuQWI4Uk42SmNkQTlLYkYwYUJqTlExcXZDOUM3OGJobkZiR1BLcDAxRGdjZG52eUZwOWc=";
+        const GEMINI_API_KEY = atob(OBSFUCATED_KEY);
 
         const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
