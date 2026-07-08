@@ -374,30 +374,47 @@
         }
 
         // Global function window mapping to handle click tracking safely across dynamic rendering frames
-        window.submitSupportTicketForm = function(buttonElement) {
+        window.submitSupportTicketForm = async function(buttonElement) {
             const container = buttonElement.parentElement;
             const email = container.querySelector('#ticketUserEmail').value.trim();
             const bodyMessage = container.querySelector('#ticketUserMessage').value.trim();
 
             if (!email || !bodyMessage) {
-                alert('Please fill out both the email and message fields before dispatching your ticket.');
+                alert('Please fill out all fields before submitting.');
                 return;
             }
 
-            // Open user's client system email natively with targeted details
-            const mailtoUrl = `mailto:support@audiory.site?subject=Audiory Help Desk Escalation Request&body=Sender Email: ${encodeURIComponent(email)}%0A%0AMessage:%0A${encodeURIComponent(bodyMessage)}`;
-            window.location.href = mailtoUrl;
+            buttonElement.innerText = "Dispatching Ticket...";
+            buttonElement.disabled = true;
 
-            // Transmit visual update back to chat logs
-            const mainContentWrapper = container.parentElement;
-            mainContentWrapper.innerHTML = `
-                <div class="text-center p-2">
-                    <span class="text-emerald-400 font-bold text-xs block mb-1">✓ Ticket Prepared Successfully</span>
-                    <p class="text-xs text-gray-400">Your mail client has been summoned to deliver the log files to <strong>support@audiory.site</strong>. Our desk engineers will reply shortly.</p>
-                </div>
-            `;
+            try {
+                // Mapped precisely to your live AWS Elastic Beanstalk instances
+                const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? 'http://localhost:5000' 
+                    : 'http://audiory-ai-backend-env.eba-krgcjbt4.eu-north-1.elasticbeanstalk.com'; 
+
+                const response = await fetch(`${BACKEND_URL}/api/support-ticket`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail: email, userMessage: bodyMessage })
+                });
+
+                if (!response.ok) throw new Error('Transit degradation.');
+
+                const mainContentWrapper = container.parentElement;
+                mainContentWrapper.innerHTML = `
+                    <div class="text-center p-2">
+                        <span class="text-emerald-400 font-bold text-xs block mb-1">✓ Ticket Dispatched via Resend</span>
+                        <p class="text-xs text-gray-400">Your ticket payload has successfully reached <strong>support@audiory.site</strong>. Check your inbox soon!</p>
+                    </div>
+                `;
+            } catch (error) {
+                console.error(error);
+                buttonElement.innerText = "Transit Failure. Retry Execution";
+                buttonElement.disabled = false;
+            }
         };
-
+        
         function formatResponsePayload(text) {
             let html = text;
             const blocks = [];
