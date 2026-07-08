@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audiory Elite AI Hub</title>
+    <title>Audiory Agent Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #030712; color: #f3f4f6; }
@@ -12,7 +12,6 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #374151; border-radius: 9999px; }
         pre code { font-family: 'Courier New', Courier, monospace; }
         
-        /* Markdown Lists and Prose Formatting */
         .prose-custom p { margin-bottom: 0.75rem; }
         .prose-custom p:last-child { margin-bottom: 0; }
         .prose-custom ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 0.75rem; }
@@ -28,7 +27,7 @@
             <button id="sidebarToggle" class="p-2 text-gray-400 hover:text-white rounded-lg focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
-            <span class="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Audiory Elite</span>
+            <span class="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Audiory Agent</span>
         </div>
         <button id="newChatMobileBtn" class="bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border border-blue-500/30">
             + New Task
@@ -38,16 +37,15 @@
     <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 lg:static lg:flex flex-col w-72 bg-gray-900 border-r border-gray-800 z-50 transition-transform duration-300 ease-in-out pt-16 lg:pt-0 h-full flex-shrink-0">
         <div class="hidden lg:flex p-5 items-center justify-between border-b border-gray-800">
             <div class="flex items-center space-x-2">
-                <div class="w-2.5 h-2.5 bg-blue-500 rounded-full shadow-[0_0_10px_#3b82f6]"></div>
-                <h2 class="font-bold text-lg tracking-wide bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Audiory Elite Hub</h2>
+                <div class="w-2.5 h-2.5 bg-purple-500 rounded-full shadow-[0_0_10px_#a855f7]"></div>
+                <h2 class="font-bold text-lg tracking-wide bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">Audiory Agent Pro</h2>
             </div>
-            <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/20 font-bold tracking-widest">PRO</span>
         </div>
 
         <div class="p-4">
-            <button id="newChatDesktopBtn" class="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl py-3 px-4 text-sm hover:opacity-95 shadow-lg shadow-blue-900/20 active:scale-[0.98] transition-all">
+            <button id="newChatDesktopBtn" class="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl py-3 px-4 text-sm hover:opacity-95 shadow-lg active:scale-[0.98] transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                <span>New Workspace</span>
+                <span>New Agent Workspace</span>
             </button>
         </div>
 
@@ -55,42 +53,56 @@
             <div class="text-[11px] font-bold text-gray-500 px-3 uppercase tracking-wider mb-2">Workspace Logs</div>
             <div id="historyList" class="space-y-1"></div>
         </div>
-
-        <div class="p-4 border-t border-gray-800 bg-gray-950/40 text-center text-xs text-gray-500">
-            Audiory Independent Engine Core
-        </div>
     </aside>
 
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden backdrop-blur-sm"></div>
 
     <main class="flex-1 flex flex-col min-w-0 h-full relative pt-16 lg:pt-0 overflow-hidden">
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-900/5 rounded-full filter blur-[120px] pointer-events-none"></div>
-
         <header class="hidden lg:flex items-center justify-between px-8 py-4 bg-gray-900/30 border-b border-gray-800/80 backdrop-blur-md flex-shrink-0">
             <div class="flex items-center space-x-3">
-                <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_12px_#34d399]"></div>
-                <h1 class="text-lg font-bold tracking-wide text-white">Advanced Native Core</h1>
-            </div>
-            <div class="flex items-center space-x-4">
-                <span class="text-xs text-gray-400 bg-gray-800/60 border border-gray-700/50 px-3 py-1.5 rounded-xl font-medium">Model Stack: Gemini-2.5-Flash Direct</span>
+                <div class="w-3 h-3 bg-purple-400 rounded-full animate-pulse shadow-[0_0_12px_#c084fc]"></div>
+                <h1 class="text-lg font-bold tracking-wide text-white">Audiory Multimodal Assistant Agent</h1>
             </div>
         </header>
 
         <div id="chatBox" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 flex flex-col custom-scrollbar relative z-10 min-h-0">
             <div class="flex items-start space-x-4 max-w-[85%] sm:max-w-[80%] self-start">
-                <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
+                <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">AGT</div>
                 <div class="bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm prose-custom">
-                    <p class="font-semibold text-blue-400 mb-1">Audiory Elite System Active.</p>
-                    <p class="text-gray-300">How can I help you today?</p>
+                    <p class="font-semibold text-purple-400 mb-1">Audiory Intel Agent Fully Operational.</p>
+                    <p class="text-gray-300">I am now optimized to serve producers, music buyers, and recording artists across all fronts:</p>
+                    <ul class="list-disc pl-5 my-2">
+                        <li><strong>Beat Discovery & Curation:</strong> Describe your target vibe or tempo, and I will recommend matching instrumentals.</li>
+                        <li><strong>Instant Cover Art Generator:</strong> Type <code>/generate art [describe your vision]</code> and I will instantly design custom track artwork or release canvas concepts.</li>
+                        <li><strong>Multimodal Ingestion:</strong> Attach a photo, and tell me exactly how to transform it, analyze its mood, or write lyrics matching its aesthetic.</li>
+                    </ul>
                 </div>
             </div>
         </div>
 
+        <div id="imagePreviewContainer" class="hidden px-8 py-3 bg-gray-900/60 border-t border-gray-800 flex items-center gap-3 flex-shrink-0">
+            <div class="relative w-14 h-14 bg-gray-950 rounded-xl border border-gray-700 overflow-hidden">
+                <img id="imagePreview" class="w-full h-full object-cover">
+                <button id="clearImageBtn" type="button" class="absolute top-0 right-0 bg-red-600 text-white rounded-bl p-0.5 hover:bg-red-500">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <span class="text-xs text-gray-400 italic">Image attached to production vector buffer</span>
+        </div>
+
         <div class="p-4 sm:p-6 bg-gradient-to-t from-gray-950 via-gray-950/90 to-transparent border-t border-gray-800/60 flex-shrink-0 relative z-10">
-            <form id="chatForm" class="max-w-4xl mx-auto bg-gray-900/90 border border-gray-800 rounded-2xl p-2 flex items-center gap-2 focus-within:border-blue-500/60 focus-within:ring-1 focus-within:ring-blue-500/30 transition-all shadow-2xl backdrop-blur-md">
-                <input type="text" id="userInput" placeholder="Ask for website code scripts, creative content layouts, or system setups..." 
-                       class="flex-1 bg-transparent px-4 py-3 text-sm focus:outline-none placeholder-gray-500 text-white" required autocomplete="off">
-                <button type="submit" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl px-6 py-3 text-sm hover:opacity-95 active:scale-95 shadow-md shadow-blue-900/20 transition-all flex items-center space-x-2 flex-shrink-0">
+            <form id="chatForm" class="max-w-4xl mx-auto bg-gray-900/90 border border-gray-800 rounded-2xl p-2 flex items-center gap-2 focus-within:border-purple-500/60 focus-within:ring-1 focus-within:ring-purple-500/30 transition-all shadow-2xl backdrop-blur-md">
+                
+                <input type="file" id="imageFileInput" accept="image/*" class="hidden">
+                
+                <button type="button" id="attachBtn" class="p-3 text-gray-400 hover:text-purple-400 hover:bg-gray-800/50 rounded-xl transition-all flex-shrink-0" title="Attach visual concept artwork">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </button>
+
+                <input type="text" id="userInput" placeholder="Ask for beats, write scripts, or type /generate art dark vintage hiphop cover..." 
+                       class="flex-1 bg-transparent px-2 py-3 text-sm focus:outline-none placeholder-gray-500 text-white" required autocomplete="off">
+                
+                <button type="submit" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl px-6 py-3 text-sm hover:opacity-95 active:scale-95 transition-all flex-shrink-0">
                     <span>Execute</span>
                 </button>
             </form>
@@ -98,22 +110,20 @@
     </main>
 
     <script type="module">
-        // Import Google Gen AI SDK directly into frontend
         import { GoogleGenAI } from "https://esm.run/@google/genai";
 
-        // EXPLICIT SYSTEM ARCHITECTURE INSTRUCTIONS
-        const SYSTEM_PROMPT = `You are the primary engine assistant and lead tech architect for the Audiory platform. 
-        You are a world-class code developer, creative automation engine, and designer.
-        
-        CRITICAL RESPONSE INSTRUCTIONS:
-        1. If asked to generate software code, scripts, configurations, or schemas, write them cleanly with structural logic, inside markdown triple-backticks (\`\`\`).
-        2. Format lists cleanly. Always use standard bullet marks (-) or structured numbering (1., 2.) so the UI engine formats them as real web layouts.
-        3. Maintain a confident, cutting-edge corporate tech specialist persona.`;
+        const SYSTEM_PROMPT = `You are the primary Multimodal AI Support Agent and Technical Engineer for Audiory.
+        Your job is to assist both music producers uploading tracks and music buyers looking to purchase beats.
 
-        // PASTE YOUR GEMINI API KEY COPIED FROM IMAGE_FEE2DA.PNG INSIDE THESE QUOTES:
-        const OBSFUCATED_KEY = "QVEuQWI4Uk42SmNkQTlLYkYwYUJqTlExcXZDOUM3OGJobkZiR1BLcDAxRGdjZG52eUZwOWc=";
-        const GEMINI_API_KEY = atob(OBSFUCATED_KEY);
+        CORE AGENT COMPETENCIES:
+        1. BEAT CURATION & DISCOVERY: Help artists discover the perfect instrumentals. Ask about their favorite reference track, BPM, mood, or genre, and guide them with authoritative audio insights.
+        2. ART WORK & COVERS: If a user wants to generate artwork, prompt them to write "/generate art [description]".
+        3. PHOTO ANALYSIS & IMAGE PROCESSING: If the user provides an image file attachment, look at it carefully. Interpret what's inside the image, explain its style, and tell them how it can be modified, optimized into cover art templates, or write structural lyrics inspired directly by the image's vibe.
+        4. DEVELOPER CONFIGURATIONS: If requested to write software plugins or website code layouts, wrap them cleanly in markdown blocks (\`\`\`).`;
 
+        // PASTE YOUR SCRAMBLED BASE64 STRING WITHIN THESE QUOTES:
+        const OBFUSCATED_KEY = "QVEuQWI4Uk42SmNkQTlLYkYwYUJqTlExcXZDOUM3OGJobkZiR1BLcDAxRGdjZG52eUZwOWc="; 
+        const GEMINI_API_KEY = atob(OBFUSCATED_KEY);
         const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
         const chatForm = document.getElementById('chatForm');
@@ -125,9 +135,42 @@
         const sidebarOverlay = document.getElementById('sidebarOverlay');
         const newChatDesktopBtn = document.getElementById('newChatDesktopBtn');
         const newChatMobileBtn = document.getElementById('newChatMobileBtn');
+        
+        const attachBtn = document.getElementById('attachBtn');
+        const imageFileInput = document.getElementById('imageFileInput');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const clearImageBtn = document.getElementById('clearImageBtn');
 
-        let sessions = JSON.parse(localStorage.getItem('audiory_elite_sessions')) || [];
-        let currentSessionId = localStorage.getItem('audiory_elite_current_id') || null;
+        let sessions = JSON.parse(localStorage.getItem('audiory_agent_sessions')) || [];
+        let currentSessionId = localStorage.getItem('audiory_agent_current_id') || null;
+        let attachedImageBase64 = null;
+        let attachedImageMimeType = null;
+
+        // Attachment UI Management
+        attachBtn.addEventListener('click', () => imageFileInput.click());
+        imageFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            attachedImageMimeType = file.type;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                attachedImageBase64 = event.target.result.split(',')[1];
+                imagePreview.src = event.target.result;
+                imagePreviewContainer.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function clearAttachedImage() {
+            attachedImageBase64 = null;
+            attachedImageMimeType = null;
+            imageFileInput.value = '';
+            imagePreviewContainer.classList.add('hidden');
+            imagePreview.src = '';
+        }
+        clearImageBtn.addEventListener('click', clearAttachedImage);
 
         function toggleSidebar() {
             sidebar.classList.toggle('-translate-x-full');
@@ -144,18 +187,29 @@
             const message = userInput.value.trim();
             if(!message) return;
 
-            if (!currentSessionId) {
-                createNewSession(message);
-            }
+            if (!currentSessionId) createNewSession(message);
 
-            appendMessage(message, 'user');
+            // Display user prompt message bubble
+            appendUserMessageBubble(message, attachedImageBase64 ? imagePreview.src : null);
             userInput.value = '';
 
             const botMessageId = createEmptyBotBubble();
             const textContainer = document.querySelector(`#${botMessageId} .msg-content`);
 
+            // INTERCEPT COMMAND: Cover Art Generation Router
+            if (message.toLowerCase().includes('/generate art')) {
+                let promptDescription = message.toLowerCase().split('/generate art')[1]?.trim();
+                if (!promptDescription) promptDescription = "Premium music cover art abstract modern design";
+                
+                setTimeout(() => {
+                    renderGeneratedArtCard(textContainer, promptDescription);
+                    updateSessionStorage(message, `[Art Generation Request Matrix Completed for prompt: ${promptDescription}]`);
+                    clearAttachedImage();
+                }, 1500);
+                return;
+            }
+
             try {
-                // Compile structural history matrix for conversational persistence
                 const currentSession = sessions.find(s => s.id === currentSessionId);
                 const contents = [];
                 
@@ -165,7 +219,17 @@
                         contents.push({ role: 'model', parts: [{ text: turn.response }] });
                     });
                 }
-                contents.push({ role: 'user', parts: [{ text: message }] });
+
+                const currentParts = [{ text: message }];
+                if (attachedImageBase64) {
+                    currentParts.push({
+                        inlineData: {
+                            data: attachedImageBase64,
+                            mimeType: attachedImageMimeType
+                        }
+                    });
+                }
+                contents.push({ role: 'user', parts: currentParts });
 
                 const response = await ai.models.generateContent({
                     model: 'gemini-2.5-flash',
@@ -176,41 +240,36 @@
                     }
                 });
 
-                const systemReply = response.text || 'Execution processed empty response parameters.';
+                const systemReply = response.text || 'Processing output yielded empty parameters.';
                 textContainer.innerHTML = formatResponsePayload(systemReply);
                 updateSessionStorage(message, systemReply);
 
             } catch (error) {
                 console.error(error);
                 if (textContainer) {
-                    textContainer.innerHTML = `<span class="text-red-400 font-semibold block mb-1">Execution Failure</span> API Key validation mismatch or resource limits exceeded. Verify key parameters inside script matrix.`;
+                    textContainer.innerHTML = `<span class="text-red-400 font-semibold block mb-1">Execution Failure</span> Verify your Base64 encoded API key string config on line 78.`;
                 }
             } finally {
+                clearAttachedImage();
                 setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 30);
             }
         });
 
-        function appendMessage(text, sender, isHistorical = false) {
+        function appendUserMessageBubble(text, imageSrc) {
             const container = document.createElement('div');
-            if (sender === 'user') {
-                container.className = "flex items-start justify-end w-full space-x-3 max-w-[85%] sm:max-w-[80%] self-end animate-fade-in";
-                container.innerHTML = `
-                    <div class="bg-gradient-to-r from-blue-600/90 to-purple-600/90 border border-blue-500/30 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tr-none text-sm whitespace-pre-line leading-relaxed backdrop-blur-sm">
-                        ${text}
-                    </div>
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center font-bold text-xs text-gray-300 shadow-md">ME</div>
-                `;
-            } else {
-                container.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[80%] self-start";
-                container.innerHTML = `
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
-                    <div class="msg-content bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm prose-custom">
-                        ${formatResponsePayload(text)}
-                    </div>
-                `;
-            }
+            container.className = "flex items-start justify-end w-full space-x-3 max-w-[85%] sm:max-w-[80%] self-end animate-fade-in";
+            
+            let imgHtml = imageSrc ? `<img src="${imageSrc}" class="w-32 h-32 object-cover rounded-xl border border-purple-500/40 mb-2 shadow-lg block">` : '';
+            
+            container.innerHTML = `
+                <div class="bg-gradient-to-r from-blue-600/90 to-purple-600/90 border border-blue-500/30 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tr-none text-sm leading-relaxed backdrop-blur-sm">
+                    ${imgHtml}
+                    <div class="whitespace-pre-line">${text}</div>
+                </div>
+                <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center font-bold text-xs text-gray-300 shadow-md">ME</div>
+            `;
             chatBox.appendChild(container);
-            if (!isHistorical) setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 30);
+            setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 30);
         }
 
         function createEmptyBotBubble() {
@@ -219,11 +278,11 @@
             container.id = id;
             container.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[80%] self-start animate-fade-in";
             container.innerHTML = `
-                <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
+                <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">AGT</div>
                 <div class="msg-content bg-blue-950/20 border border-blue-800/40 text-gray-300 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm">
                     <span class="flex items-center space-x-2 text-gray-500 italic text-xs">
-                        <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
-                        <span>Assembling structural vectors...</span>
+                        <span class="w-2 h-2 rounded-full bg-purple-500 animate-ping"></span>
+                        <span>Assembling Agent metrics...</span>
                     </span>
                 </div>
             `;
@@ -232,10 +291,29 @@
             return id;
         }
 
+        function renderGeneratedArtCard(targetElement, descriptionPrompt) {
+            const cleanSeed = Math.floor(Math.random() * 100000);
+            const imageUrl = `https://image.pollinations.ai/p/${encodeURIComponent(descriptionPrompt)}?width=512&height=512&seed=${cleanSeed}&model=flux`;
+            
+            targetElement.innerHTML = `
+                <div class="p-1">
+                    <div class="flex items-center space-x-2 text-purple-400 font-bold mb-2 text-xs tracking-wider uppercase">
+                        <span>🎨 Audiory Cover Art Render Matrix</span>
+                    </div>
+                    <div class="w-64 h-64 mx-auto my-3 border-2 border-purple-500/30 rounded-xl overflow-hidden shadow-2xl relative group bg-black">
+                        <img src="${imageUrl}" alt="Generated Canvas" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-xs text-gray-400 bg-black/40 p-3 border border-gray-800 rounded-xl italic mb-3 text-center">"${descriptionPrompt}"</p>
+                    <a href="${imageUrl}" target="_blank" download="audiory-cover.jpg" class="w-full inline-block text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-2.5 px-4 rounded-xl text-xs shadow-md hover:opacity-90 transition-all">
+                        Download Master Quality Canvas
+                    </a>
+                </div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
         function formatResponsePayload(text) {
             let html = text;
-
-            // Step 1: Escape basic layout characters within codeblocks to secure strings
             const blocks = [];
             html = html.replace(/```([\s\S]*?)```/g, (match, code) => {
                 const id = `__CODE_BLOCK_PLACEHOLDER_${blocks.length}__`;
@@ -243,27 +321,20 @@
                 return id;
             });
 
-            // Step 2: Handle Markdown syntax features safely
             html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            // Format bulleted list configurations
             html = html.replace(/^\s*[\-\*]\s+(.*)$/gm, '<li>$1</li>');
             html = html.replace(/((?:<li>.*<\/li>\s*)+)/g, '<ul class="list-disc pl-5 my-2">$1</ul>');
-
-            // Format numerical list lines
             html = html.replace(/^\s*\d+\.\s+(.*)$/gm, '<li>$1</li>');
             html = html.replace(/((?:<li>.*<\/li>\s*)+)/g, (match) => {
                 if (match.includes('list-disc')) return match; 
                 return `<ol class="list-decimal pl-5 my-2">${match}</ol>`;
             });
 
-            // Format independent lines into paragraph setups
             html = html.split('\n\n').map(p => {
                 if (p.trim().startsWith('<ul') || p.trim().startsWith('<ol') || p.trim().startsWith('__CODE')) return p;
                 return `<p>${p.replace(/\n/g, '<br>')}</p>`;
             }).join('');
 
-            // Step 3: Inject code back into visual block containers
             blocks.forEach((codeContent, index) => {
                 const lines = codeContent.trim().split('\n');
                 let language = 'code';
@@ -271,12 +342,10 @@
                     language = lines.shift();
                 }
                 const escapedContent = lines.join('\n').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                
                 const blockTemplate = `
                     <div class="my-4 border border-gray-800 rounded-xl overflow-hidden shadow-xl bg-gray-950/90 text-left">
                         <div class="bg-gray-900 px-4 py-2 flex items-center justify-between border-b border-gray-800 text-[11px] text-gray-400 font-mono tracking-wide uppercase">
-                            <span>${language} engine code block</span>
-                            <span class="text-gray-600">read-only</span>
+                            <span>${language} block</span>
                         </div>
                         <pre class="p-4 overflow-x-auto text-xs font-mono text-emerald-400 leading-relaxed custom-scrollbar"><code>${escapedContent}</code></pre>
                     </div>
@@ -289,11 +358,7 @@
 
         function createNewSession(initialText = "New Automation Session") {
             const truncateTitle = initialText.length > 22 ? initialText.substr(0, 22) + '...' : initialText;
-            const newSession = {
-                id: 'session-' + Date.now(),
-                title: truncateTitle,
-                history: []
-            };
+            const newSession = { id: 'session-' + Date.now(), title: truncateTitle, history: [] };
             sessions.unshift(newSession);
             currentSessionId = newSession.id;
             saveAndRefreshSessions();
@@ -303,9 +368,9 @@
         function clearChatInterface() {
             chatBox.innerHTML = `
                 <div class="flex items-start space-x-4 max-w-[85%] sm:max-w-[80%] self-start animate-fade-in">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">SYS</div>
+                    <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white shadow-md">AGT</div>
                     <div class="bg-gray-900/80 border border-gray-800/80 text-gray-100 rounded-2xl px-5 py-4 shadow-xl rounded-tl-none text-sm leading-relaxed backdrop-blur-sm prose-custom">
-                        <p>New sandbox architecture workspace initialized. Define the scope or requirements you want processed.</p>
+                        <p>New active agent workflow channel online. Submit asset photos, map licenses, or initiate track cover generation scripts.</p>
                     </div>
                 </div>
             `;
@@ -324,14 +389,31 @@
 
         function switchSession(id) {
             currentSessionId = id;
-            localStorage.setItem('audiory_elite_current_id', id);
+            localStorage.setItem('audiory_agent_current_id', id);
             const session = sessions.find(s => s.id === id);
-            
             clearChatInterface();
             if (session && session.history.length > 0) {
                 session.history.forEach(chat => {
-                    appendMessage(chat.query, 'user', true);
-                    appendMessage(chat.response, 'bot', true);
+                    if (chat.response.startsWith('[Art Generation Request')) {
+                        const container = document.createElement('div');
+                        container.className = "flex items-start justify-end w-full space-x-3 max-w-[85%] sm:max-w-[80%] self-end";
+                        container.innerHTML = `<div class="bg-gradient-to-r from-blue-600/90 to-purple-600/90 text-gray-100 rounded-2xl px-5 py-4 text-sm">${chat.query}</div>`;
+                        chatBox.appendChild(container);
+                        
+                        const botContainer = document.createElement('div');
+                        botContainer.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[80%] self-start";
+                        botContainer.innerHTML = `<div class="flex-shrink-0 w-8 h-8 rounded-xl bg-purple-600 flex items-center justify-center font-bold text-xs text-white">AGT</div><div class="msg-content bg-gray-900 border border-gray-800 p-4 rounded-2xl"></div>`;
+                        chatBox.appendChild(botContainer);
+                        
+                        const promptText = chat.query.toLowerCase().split('/generate art')[1]?.trim() || "Cover Art";
+                        renderGeneratedArtCard(botContainer.querySelector('.msg-content'), promptText);
+                    } else {
+                        appendUserMessageBubble(chat.query, null);
+                        const container = document.createElement('div');
+                        container.className = "flex items-start space-x-4 max-w-[85%] sm:max-w-[80%] self-start";
+                        container.innerHTML = `<div class="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-xs text-white">AGT</div><div class="bg-gray-900 border border-gray-800 text-gray-100 rounded-2xl px-5 py-4 text-sm prose-custom">${formatResponsePayload(chat.response)}</div>`;
+                        chatBox.appendChild(container);
+                    }
                 });
             }
             setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 30);
@@ -341,60 +423,41 @@
         function deleteSession(id, event) {
             event.stopPropagation();
             sessions = sessions.filter(s => s.id !== id);
-            if (currentSessionId === id) {
-                currentSessionId = sessions.length > 0 ? sessions[0].id : null;
-            }
+            if (currentSessionId === id) currentSessionId = sessions.length > 0 ? sessions[0].id : null;
             saveAndRefreshSessions();
-            if (currentSessionId) {
-                switchSession(currentSessionId);
-            } else {
-                createNewSession();
-            }
+            if (currentSessionId) switchSession(currentSessionId); else createNewSession();
         }
 
         function saveAndRefreshSessions() {
-            localStorage.setItem('audiory_elite_sessions', JSON.stringify(sessions));
-            localStorage.setItem('audiory_elite_current_id', currentSessionId);
+            localStorage.setItem('audiory_agent_sessions', JSON.stringify(sessions));
+            localStorage.setItem('audiory_agent_current_id', currentSessionId);
             renderHistoryUI();
         }
 
         function renderHistoryUI() {
             historyList.innerHTML = '';
-            if(sessions.length === 0) {
-                historyList.innerHTML = `<div class="text-xs text-gray-600 italic p-3">No active log files</div>`;
-                return;
-            }
-            
+            if(sessions.length === 0) return;
             sessions.forEach(session => {
                 const isActive = session.id === currentSessionId;
-                const activeClasses = isActive 
-                    ? 'bg-blue-600/10 border-blue-500/30 text-white' 
-                    : 'text-gray-400 hover:bg-gray-800/50 hover:text-gray-200 border-transparent';
-                
+                const activeClasses = isActive ? 'bg-purple-600/10 border-purple-500/30 text-white' : 'text-gray-400 hover:bg-gray-800/50 border-transparent';
                 const item = document.createElement('div');
                 item.className = `group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium border cursor-pointer transition-all ${activeClasses}`;
                 item.addEventListener('click', () => switchSession(session.id));
-                
                 item.innerHTML = `
                     <div class="flex items-center space-x-2.5 min-w-0">
-                        <svg class="w-3.5 h-3.5 flex-shrink-0 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        <svg class="w-3.5 h-3.5 flex-shrink-0 text-gray-500 group-hover:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                         <span class="truncate pr-2">${session.title}</span>
                     </div>
                     <button class="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-400 p-0.5 rounded transition-all">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
                 `;
-                
                 item.querySelector('button').addEventListener('click', (e) => deleteSession(session.id, e));
                 historyList.appendChild(item);
             });
         }
 
-        if (currentSessionId && sessions.some(s => s.id === currentSessionId)) {
-            switchSession(currentSessionId);
-        } else {
-            renderHistoryUI();
-        }
+        if (currentSessionId && sessions.some(s => s.id === currentSessionId)) switchSession(currentSessionId); else renderHistoryUI();
     </script>
 </body>
 </html>
